@@ -10,7 +10,7 @@ Flsun Slicer is based on Prusa Research's PrusaSlicer, which is derive
 
 ## Flsun Slicer Main functions and features
 
-main function:
+Main function:
 
 *   Support the basic slicing function of stl, 3mf, step, obj and other formats and G-code file preview.
     
@@ -23,7 +23,7 @@ main function:
 *    Support remote control and monitoring.
     
 
-main feature:
+Main feature:
 
 ● Finer control
 
