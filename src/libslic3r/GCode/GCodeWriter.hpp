@@ -25,8 +25,9 @@ class GCodeWriter {
 public:
     GCodeConfig config;
     bool multiple_extruders;
-    
-    GCodeWriter() : 
+    std::string printer_model;
+    std::string m_is_AB;
+    GCodeWriter() :
         multiple_extruders(false), m_extrusion_axis("E"), m_extruder(nullptr),
         m_single_extruder_multi_material(false),
         m_last_acceleration(0), m_max_acceleration(0),

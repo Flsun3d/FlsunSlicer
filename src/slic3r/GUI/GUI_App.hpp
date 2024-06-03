@@ -176,7 +176,8 @@ public:
     ~GUI_App() override;
     wxString btn_lable = _L("Prepare");
     wxString key_lable = _L("Commands");
-
+ 
+    double      m_bed_size;
     wxColour    m_color_tab_bg;
     wxColour    m_color_top_bg;
     wxColour    m_color_top_font_def;

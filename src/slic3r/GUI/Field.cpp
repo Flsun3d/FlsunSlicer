@@ -632,8 +632,9 @@ void TextCtrl::set_value(const boost::any& value, bool change_event/* = false*/)
 
 void TextCtrl::set_last_meaningful_value()
 {
-    //dynamic_cast<text_ctrl*>(window)->SetValue(boost::any_cast<wxString>(m_last_meaningful_value));
-    dynamic_cast<text_ctrl*>(window)->SetValue(double_to_string(m_opt.get_default_value<ConfigOptionFloats>()->get_at(m_opt_idx)));
+   // dynamic_cast<text_ctrl*>(window)->SetValue(boost::any_cast<wxString>(m_last_meaningful_value));
+    //将设置上次的值改为设置为默认值
+    dynamic_cast<text_ctrl *>(window)->SetValue(double_to_string(m_opt.get_default_value<ConfigOptionFloats>()->get_at(m_opt_idx)));
     propagate_value();
 }
 

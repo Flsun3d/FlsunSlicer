@@ -169,7 +169,10 @@ Model Model::read_from_archive(const std::string& input_file, DynamicPrintConfig
     assert(config_substitutions != nullptr);
 
     Model model;
+    boost::filesystem::path filePath(input_file);
 
+    // 使用路径对象的文件名成员函数获取文件名
+    std::string fileName = filePath.filename().string();
     bool result = false;
     if (boost::algorithm::iends_with(input_file, ".3mf") || boost::algorithm::iends_with(input_file, ".zip"))
         result = load_3mf(input_file.c_str(), *config, *config_substitutions, &model, options & LoadAttribute::CheckVersion);
@@ -189,7 +192,7 @@ Model Model::read_from_archive(const std::string& input_file, DynamicPrintConfig
 //        }
 //        else
             o->input_file = input_file;
-            o->name += ".3mf";
+            o->name       = fileName;
 
     }
 

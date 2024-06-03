@@ -14,10 +14,11 @@ WebPanel::WebPanel(wxWindow *parent, wxWindowID winid, const wxString &url) : wx
     auto sizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(sizer);
     m_web_view = wxWebView::New(this, winid, url);
-  
+    //m_web_view->Bind(wxEVT_WEBVIEW_ERROR, &WebPanel::OnWebViewError, this);
     if (m_web_view) {
         m_web_view->LoadURL(url);
         sizer->Add(m_web_view, 1, wxEXPAND);
+        is_connect_false = false;
         m_vilid = true;
     } else {
         m_vilid = false;
@@ -32,6 +33,13 @@ WebPanel::~WebPanel()
 void WebPanel::loadURL(const wxString &url) { m_web_view->LoadURL(url); }
 
 void WebPanel::reLoad() { m_web_view->Reload(); }
+
+void WebPanel::OnWebViewError(wxWebViewEvent &event) 
+{
+    wxString errorMessage = event.GetString();
+    is_connect_false      = true;
+    //wxMessageBox("Error loading page:\n" + errorMessage, "Error", wxOK | wxICON_ERROR);
+}
 
 //void WebPanel::OnWebViewNavigating(wxWebViewEvent &event) 
 //{
@@ -188,6 +196,10 @@ bool WebPage::addWebPanel(const wxString &url, wxString username)
             return false;
         }
     }
+    /*if (webpage->is_connect_false) {
+        wxMessageBox("Error loading page:\n", "Error", wxOK | wxICON_ERROR);
+    }*/
+
     webpage->SetWindowStyleFlag(webpage->GetWindowStyleFlag() & ~wxBORDER_SIMPLE);
     //std::string urlll = "http://" + url.ToStdString();
     //CURL *curl = curl_easy_init();
@@ -471,6 +483,7 @@ GUI::AddDialog::AddDialog(const wxString &title)
     sizer_dia->Add(m_bitmap1, 0, wxTOP, 20 * em);
     sizer_dia->Add(panel, 1, wxEXPAND);
     SetSizer(sizer_dia);
+    m_usernameTextCtrl->SetMaxLength(20);
     Bind(wxEVT_TIMER, [=](wxTimerEvent &event) {
         if (m_usernameTextCtrl->GetValue().empty() || m_passwordTextCtrl->GetValue().empty()) {
             loginButton->Enable(false);

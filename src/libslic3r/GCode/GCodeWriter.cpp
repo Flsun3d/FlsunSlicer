@@ -174,7 +174,10 @@ std::string GCodeWriter::set_bed_temperature(unsigned int temperature, bool wait
     } else {
         gcode << "S";
     }
-    gcode << temperature << " ; " << comment << "\n";
+    if(printer_model == "S1")
+        gcode << temperature <<" " << m_is_AB << " ; " << comment << "\n";
+    else
+        gcode << temperature << " ; " << comment << "\n";
     
     if (FLAVOR_IS(gcfTeacup) && wait)
         gcode << "M116 ; wait for bed temperature to be reached\n";

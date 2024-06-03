@@ -343,7 +343,7 @@ void OG_CustomCtrl::OnLeftDown(wxMouseEvent& event)
             }
         }
     }
-    SetFocusIgnoringChildren();//用于在鼠标点击控件外部区域控件失去焦点
+
 }
 
 void OG_CustomCtrl::OnLeaveWin(wxMouseEvent& event)

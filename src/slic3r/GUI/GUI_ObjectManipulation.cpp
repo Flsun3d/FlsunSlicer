@@ -744,33 +744,34 @@ void ObjectManipulation::update_if_dirty()
             auto bnm = (selection.get_bounding_box_in_current_reference_system().first.size())
                            .cwiseQuotient(selection.get_unscaled_instance_bounding_box().size()) *
                        100.0;
-            if (bnm.x() > 100000) {
-                wxMessageBox(_L("The maximum magnification is 1000 times！"), _L("Prompt"), wxOK | wxICON_INFORMATION);
-                GLCanvas3D *canvas    = wxGetApp().plater()->canvas3D();
-                Selection & selection = canvas->get_selection();
-                selection.setup_cache();
-                if (selection.is_single_volume_or_modifier()) {
-                    GLVolume *               vol   = const_cast<GLVolume *>(selection.get_first_volume());
-                    Geometry::Transformation trafo = vol->get_volume_transformation();
-                    trafo.reset_scaling_factor();
-                    vol->set_volume_transformation(trafo);
-                } else if (selection.is_single_full_instance()) {
-                    Geometry::Transformation trafo = selection.get_first_volume()->get_instance_transformation();
-                    trafo.reset_scaling_factor();
-                    for (unsigned int idx : selection.get_volume_idxs()) {
-                        const_cast<GLVolume *>(selection.get_volume(idx))->set_instance_transformation(trafo);
-                    }
-                } else
-                    return;
+            //if (bnm.x() > 100000) 
+            //{
+            //    //wxMessageBox(_L("The maximum magnification is 1000 times！"), _L("Prompt"), wxOK | wxICON_INFORMATION);
+            //    GLCanvas3D *canvas    = wxGetApp().plater()->canvas3D();
+            //    Selection & selection = canvas->get_selection();
+            //    selection.setup_cache();
+            //    if (selection.is_single_volume_or_modifier()) {
+            //        GLVolume *               vol   = const_cast<GLVolume *>(selection.get_first_volume());
+            //        Geometry::Transformation trafo = vol->get_volume_transformation();
+            //        trafo.reset_scaling_factor();
+            //        vol->set_volume_transformation(trafo);
+            //    } else if (selection.is_single_full_instance()) {
+            //        Geometry::Transformation trafo = selection.get_first_volume()->get_instance_transformation();
+            //        trafo.reset_scaling_factor();
+            //        for (unsigned int idx : selection.get_volume_idxs()) {
+            //            const_cast<GLVolume *>(selection.get_volume(idx))->set_instance_transformation(trafo);
+            //        }
+            //    } else
+            //        return;
 
-                // Synchronize instances/volumes.
-                selection.synchronize_unselected_instances(Selection::SyncRotationType::GENERAL);
-                selection.synchronize_unselected_volumes();
+            //    // Synchronize instances/volumes.
+            //    selection.synchronize_unselected_instances(Selection::SyncRotationType::GENERAL);
+            //    selection.synchronize_unselected_volumes();
 
-                canvas->do_scale(L("Reset scale"));
-                UpdateAndShow(true);
-                return;
-            }
+            //    canvas->do_scale(L("Reset scale"));
+            //    UpdateAndShow(true);
+            //    return;
+            //}
         }
     }
     this->update_settings_value(selection);
@@ -822,7 +823,6 @@ void ObjectManipulation::update_if_dirty()
         update(m_cache.size,     m_cache.size_rounded,     meSize,     m_new_size);
         update(m_cache.rotation, m_cache.rotation_rounded, meRotation, m_new_rotation);
     }
-
     m_lock_bnt->SetLock(m_uniform_scale);
     m_lock_bnt->SetToolTip(wxEmptyString);
     m_lock_bnt->enable();
@@ -1039,7 +1039,12 @@ void ObjectManipulation::change_scale_value(int axis, double value)
 
     if (std::abs(m_cache.scale_rounded(axis) - value) < EPSILON)
         return;
-
+    auto model_x = value / 100 * m_cache.size(axis);
+    if (model_x > 430000) 
+    {
+        wxMessageBox(_L("Magnification is out of range！"), _L("Prompt"), wxOK | wxICON_INFORMATION);
+        return;
+    }
     Vec3d scale = m_cache.scale;
     scale(axis) = value;
 
@@ -1074,7 +1079,11 @@ void ObjectManipulation::change_size_value(int axis, double value)
 
     if (std::abs(m_cache.size_rounded(axis) - value) < EPSILON)
         return;
-
+    auto model_x = value / 100 * m_cache.size(axis);
+    if (model_x > 43000) {
+        wxMessageBox(_L("Magnification is out of range！"), _L("Prompt"), wxOK | wxICON_INFORMATION);
+        return;
+    }
     Vec3d size = m_cache.size;
     size(axis) = value;
 

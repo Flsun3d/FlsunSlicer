@@ -36,7 +36,6 @@ public:
 
 protected:
     void on_dpi_changed(const wxRect &suggested_rect) override;
-private:
     wxTextCtrl *m_usernameTextCtrl;
     wxTextCtrl *m_passwordTextCtrl;
 };
@@ -54,8 +53,8 @@ public:
 
     //页面是否要用（m_web_view 创建是否成功）
     bool isVilid() { return m_vilid; }
-
-    //void OnWebViewNavigating(wxWebViewEvent &event);
+    bool is_connect_false = false;
+    void OnWebViewError(wxWebViewEvent &event);
     //void OnWebViewNavigated(wxWebViewEvent &event); 
 
 protected:

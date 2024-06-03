@@ -1714,18 +1714,19 @@ std::string GCodeGenerator::placeholder_parser_process(
                     if (isOut == true) {
                         break;
                     }
-                    if (!obj->layers()[0]->lslices.empty()) {
-                        if (!obj->layers()[0]->lslices[0].contour.empty()) {
-                            Polygon     py(obj->layers()[0]->lslices[0].contour.points);
-                            const Point offset = obj->instances()[0].shift;
-                            py.translate(offset.x(), offset.y());
-                            Polygons itsec2 = intersection(py, pCircle);
-                            if (itsec2.empty()) {
-                                isOut = true;
+                    if(!m_print->first_layer_islands().empty())
+                    {
+                        double      area_judge = scale_(110);
+                        std::string is_AB;
+                        auto        judge_areaAB = m_print->first_layer_islands();
 
-                            } else {
-                                isOut = true;
-                                isIn  = true;
+                        for (auto poly : judge_areaAB) {
+                            for (auto point : poly.points) {
+                                if (std::sqrt(std::pow(point.x(), 2) + std::pow(point.y(), 2)) < area_judge) {
+                                    isIn = true;
+                                } else if (std::sqrt(std::pow(point.x(), 2) + std::pow(point.y(), 2)) >= area_judge) {
+                                    isOut = true;
+                                }
                             }
                         }
                     }
@@ -1741,6 +1742,7 @@ std::string GCodeGenerator::placeholder_parser_process(
             } else if (isIn && !isOut) {
                 is_AB = "A";
             }
+            m_writer.printer_model = "S1";
             std::string hot("is_AB");
             int         count = 2;
             while (count--) 
@@ -1748,10 +1750,13 @@ std::string GCodeGenerator::placeholder_parser_process(
                 auto begin_hot = output.find("is_AB");
                 if (is_AB == "A") {
                     output.replace(begin_hot, hot.size(), "A1 B0");
+                    m_writer.m_is_AB ="A1 B0";
                 } else if (is_AB == "B") {
                     output.replace(begin_hot, hot.size(), "A0 B1");
+                    m_writer.m_is_AB ="A0 B1";
                 } else {
                     output.replace(begin_hot, hot.size(), "A1 B1");
+                    m_writer.m_is_AB ="A1 B1";
                 }
             }
         }

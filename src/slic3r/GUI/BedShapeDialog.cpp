@@ -132,6 +132,7 @@ void BedShape::apply_optgroup_values(ConfigOptionsGroupShp optgroup)
     switch (m_build_volume.type()) {
     case BuildVolume::Type::Circle:
         optgroup->set_value("diameter", double_to_string(2. * unscaled<double>(m_build_volume.circle().radius)));
+        wxGetApp().m_bed_size = 2. * unscaled<double>(m_build_volume.circle().radius);
         break;
     default:
         // rectangle, convex, concave...

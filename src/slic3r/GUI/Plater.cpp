@@ -879,7 +879,6 @@ Sidebar::Sidebar(Plater *parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, 
 
     is_msw = true;
 #else
-    SetBackgroundColour(wxColor(255, 255, 255));
     p->presets_panel = p->scrolled;
 #endif //__WINDOWS__
 

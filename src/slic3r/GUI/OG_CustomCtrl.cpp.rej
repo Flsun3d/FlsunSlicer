@@ -1,0 +1,10 @@
+diff a/src/slic3r/GUI/OG_CustomCtrl.cpp b/src/slic3r/GUI/OG_CustomCtrl.cpp	(rejected hunks)
+@@ -343,7 +343,7 @@
+             }
+         }
+     }
+-
++    SetFocusIgnoringChildren();//用于在鼠标点击控件外部区域控件失去焦点
+ }
+ 
+ void OG_CustomCtrl::OnLeaveWin(wxMouseEvent& event)
