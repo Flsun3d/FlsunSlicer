@@ -9,6 +9,8 @@ set(_patch_cmd PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_LIST_DIR}/
 
 if (APPLE)
     set(_patch_cmd ${_patch_cmd} && ${PATCH_CMD} ${CMAKE_CURRENT_LIST_DIR}/PNG.patch)
+    # ponytail: pngpriv.h includes removed <fp.h> on modern macOS SDKs; force <math.h>
+    set(_patch_cmd ${_patch_cmd} && ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/patch-pngpriv.cmake)
 endif ()
 
 add_cmake_project(PNG 
