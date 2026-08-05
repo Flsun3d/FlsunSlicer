@@ -19,7 +19,15 @@ bool ConfigIni::Init()
 		cout << "file not exists!" << endl;
 		return false;
 	}
-    boost::property_tree::ini_parser::read_ini(ifs, m_root_node);
+    // ponytail: a malformed config (the shipped userconfig.ini is UTF-16) must not crash
+    // startup; on parse failure fall back to an empty tree — GetValue already handles misses.
+    try {
+        boost::property_tree::ini_parser::read_ini(ifs, m_root_node);
+    } catch (const std::exception &e) {
+        std::cerr << "ConfigIni: failed to parse " << m_file_name << ": " << e.what() << std::endl;
+        m_root_node.clear();
+        return false;
+    }
 	return true;
 
 }

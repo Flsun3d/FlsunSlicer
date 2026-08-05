@@ -5,6 +5,8 @@ add_cmake_project(
     # For whatever reason, this keeps downloading forever (repeats downloads if finished)
     URL      https://github.com/CGAL/cgal/archive/refs/tags/v5.4.zip
     URL_HASH SHA256=d7605e0a5a5ca17da7547592f6f6e4a59430a0bc861948974254d0de43eab4c0
+    # ponytail: fix CGAL 5.4 iterator.h safe-bool calling nonexistent base() (hard error on AppleClang 21)
+    PATCH_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_LIST_DIR}/patch-iterator.cmake
 )
 
 include(GNUInstallDirs)
