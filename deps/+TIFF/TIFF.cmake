@@ -1,6 +1,6 @@
 add_cmake_project(TIFF
-    URL https://gitlab.com/libtiff/libtiff/-/archive/v4.6.0/libtiff-v4.6.0.zip
-    URL_HASH SHA256=5d652432123223338a6ee642a6499d98ebc5a702f8a065571e1001d4c08c37e6
+    URL https://download.osgeo.org/libtiff/tiff-4.6.0.tar.gz  # ponytail: gitlab auto-archive hashes aren't byte-stable; osgeo release tarball is
+    URL_HASH SHA256=88b3979e6d5c7e32b50d7ec72fb15af724f6ab2cbf7e10880c360a77e4b5d99a
     CMAKE_ARGS
         -Dtiff-tools:BOOL=OFF
         -Dtiff-tests:BOOL=OFF
@@ -10,6 +10,7 @@ add_cmake_project(TIFF
         -Dzstd:BOOL=OFF
         -Dpixarlog:BOOL=OFF
         -Dlibdeflate:BOOL=OFF
+        -Dlerc:BOOL=OFF  # ponytail: else TIFF's exported target pulls LERC::LERC, which breaks wxWidgets' find_package(TIFF)
 )
 
 set(DEP_TIFF_DEPENDS ZLIB PNG JPEG OpenGL)

@@ -62,6 +62,12 @@ if (SLIC3R_GUI)
 
     find_package(JPEG MODULE QUIET)
     find_package(TIFF MODULE QUIET) # Tiff exported config is broken for static build
+    # ponytail: modern FindTIFF delegates to TIFF's config, which leaks an unresolved
+    # CMath::CMath into TIFF::TIFF's interface. libm is in libSystem on macOS, so an
+    # empty imported target satisfies the link without needing a real library.
+    if (NOT TARGET CMath::CMath)
+        add_library(CMath::CMath INTERFACE IMPORTED)
+    endif ()
     find_package(NanoSVG REQUIRED)
 
     string(REGEX MATCH "wxpng" WX_PNG_BUILTIN ${wxWidgets_LIBRARIES})
@@ -238,7 +244,7 @@ else ()
     if (APPLE)
         # On OSX, the name of the binary matches the name of the Application.
         add_custom_command(TARGET FlsunSlicer POST_BUILD
-            COMMAND ln -sf FlsunSlicer FlsunSlicer
+            # ponytail: dropped `ln -sf FlsunSlicer FlsunSlicer` — a rename-induced self-symlink that clobbered the real binary
             COMMAND ln -sf FlsunSlicer flsun-gcodeviewer
             COMMAND ln -sf FlsunSlicer PrusaGCodeViewer
             WORKING_DIRECTORY "$<TARGET_FILE_DIR:FlsunSlicer>"

@@ -109,7 +109,7 @@ if (APPLE)
 
     # This ensures dependencies don't use SDK features which are not available in the version specified by Deployment target
     # That can happen when one uses a recent SDK but specifies an older Deployment target
-    set(DEP_WERRORS_SDK "-Werror=partial-availability -Werror=unguarded-availability -Werror=unguarded-availability-new")
+    set(DEP_WERRORS_SDK "-Werror=partial-availability -Werror=unguarded-availability -Werror=unguarded-availability-new -Wno-missing-template-arg-list-after-template-kw") # ponytail: last flag lets pre-C++20 deps (OpenVDB) build under AppleClang 21
     
     set(DEP_CMAKE_OPTS
         "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
